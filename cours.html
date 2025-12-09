@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste des cours</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .cours { border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #f9f9f9; }
+    .cours h2 { margin: 0 0 8px 0; }
+    .etudiants { margin-left: 20px; }
+    @media (max-width: 768px) {
+      body { margin: 8px; }
+      .cours { padding: 8px; }
+    }
+    @media (max-width: 400px) {
+      .cours h2 { font-size: 1.1em; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Liste des cours</h1>
+  <div id="cours-list"></div>
+
+  <script>
+    // Exemple de données (à remplacer par une vraie source si besoin)
+    const coursData = [
+      {
+        id: 'C001',
+        titre: 'Mathématiques avancées',
+        etudiants: ['Alice Dupont', 'Bob Martin', 'Chloé Bernard']
+      },
+      {
+        id: 'C002',
+        titre: 'Physique quantique',
+        etudiants: ['David Leroy', 'Emma Dubois']
+      },
+      {
+        id: 'C003',
+        titre: 'Programmation Web',
+        etudiants: ['Alice Dupont', 'Emma Dubois', 'François Petit']
+      }
+    ];
+
+    // Fonction pour récupérer la liste des cours
+    function getCours() {
+      // Ici, on retourne les données statiques, mais on pourrait faire un fetch AJAX
+      return coursData;
+    }
+
+    // Fonction pour afficher la liste des cours
+    function showCours() {
+      const coursList = document.getElementById('cours-list');
+      const cours = getCours();
+      coursList.innerHTML = '';
+      cours.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'cours';
+        div.innerHTML = `
+          <h2>${c.titre}</h2>
+          <strong>Identifiant :</strong> ${c.id}<br>
+          <strong>Étudiants inscrits :</strong>
+          <ul class="etudiants">
+            ${c.etudiants.map(e => `<li>${e}</li>`).join('')}
+          </ul>
+        `;
+        coursList.appendChild(div);
+      });
+    }
+
+    // Affichage au chargement
+    showCours();
+  </script>
+</body>
+</html>

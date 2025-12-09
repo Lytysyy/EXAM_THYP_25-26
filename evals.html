@@ -1,156 +1,71 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <title>Évaluations – Omeka S</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste des évaluations</title>
   <style>
-    :root {
-      --bg-page: #f5f5f7;
-      --bg-card: #ffffff;
-      --border: #e0e0e5;
-      --border-strong: #c7c7d0;
-      --primary: #2563eb;
-      --primary-soft: #e3edff;
-      --danger: #dc2626;
-      --text-main: #111827;
-      --text-muted: #6b7280;
-      --radius-lg: 16px;
-      --radius-md: 10px;
-      --shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
-    }
-    * { box-sizing: border-box; }
     body {
+      font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: var(--bg-page);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      padding: 20px;
+      background: #f4f6fb;
+      color: #222;
     }
-    .app {
-      width: 100%;
+    .container {
       max-width: 700px;
-      background: var(--bg-card);
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      padding: 18px 18px 20px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 24px;
     }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
+    h1 {
+      text-align: center;
+      color: #2a5d9f;
+      margin-bottom: 32px;
+      font-size: 2.2em;
+      letter-spacing: 1px;
     }
-    .title h1 {
-      margin: 0;
-      font-size: 19px;
-      font-weight: 600;
-    }
-    .title small {
-      display: block;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-    .tag {
-      font-size: 12px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #f9fafb;
-    }
-    .card {
-      background: #ffffff;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      padding: 14px 14px 12px;
-      margin-bottom: 18px;
-    }
-    .card-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    fieldset { border: 0; margin: 0; padding: 0; }
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 500;
-      margin: 4px 0 4px;
-    }
-    .row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 10px 12px;
-      align-items: flex-start;
-    }
-    input[type="text"], input[type="number"] {
-      width: 100%;
-      padding: 8px 9px;
-      border-radius: 9px;
-      border: 1px solid var(--border);
-      font-size: 13px;
-    }
-    input::placeholder {
-      color: #9ca3af;
-    }
-    input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 1px var(--primary-soft);
-      background: #ffffff;
-    }
-    .btn-row {
+    #eval-form {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 12px;
+      margin-bottom: 28px;
+      justify-content: center;
     }
-    button {
+    #eval-form input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #bcd0ee;
+      font-size: 1em;
+      box-shadow: 0 2px 8px rgba(42,93,159,0.05);
+      transition: border 0.2s;
+      margin-bottom: 8px;
+    }
+    #eval-form input:focus {
+      border: 1.5px solid #2a5d9f;
+      outline: none;
+    }
+    #eval-form button {
+      background: linear-gradient(90deg,#2a5d9f 80%,#3a7bd5 100%);
+      color: #fff;
       border: none;
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 13px;
-      font-weight: 500;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 1em;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      box-shadow: 0 2px 8px rgba(42,93,159,0.09);
+      transition: background 0.2s, transform 0.2s;
     }
-    button.primary {
-      background: var(--primary);
-      color: #ffffff;
+    #eval-form button:hover {
+      background: linear-gradient(90deg,#3a7bd5 80%,#2a5d9f 100%);
+      transform: scale(1.04);
     }
-    button.secondary {
-      background: #f3f4f6;
-      color: #111827;
-    }
-    button:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
-    .status {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 6px;
-      min-height: 16px;
-    }
-    .status.error { color: var(--danger); }
-    .status.ok { color: #15803d; }
     .eval {
       border: 1px solid #e3eaf5;
       border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
       background: linear-gradient(90deg,#f9fbff 80%,#eaf2fb 100%);
       box-shadow: 0 2px 12px rgba(42,93,159,0.07);
       transition: box-shadow 0.2s, transform 0.2s;
@@ -161,105 +76,61 @@
     }
     .eval h2 {
       margin: 0 0 10px 0;
-      color: #2563eb;
-      font-size: 1.1em;
+      color: #2a5d9f;
+      font-size: 1.2em;
     }
-    .eval-details strong { color: #3a7bd5; }
+    .eval-details {
+      margin-left: 0;
+      padding-left: 18px;
+      margin-top: 6px;
+    }
+    .eval-details strong {
+      color: #3a7bd5;
+    }
     @media (max-width: 768px) {
-      .app { padding: 8px 2px; }
-      .card { padding: 8px; }
-      .eval { padding: 8px; }
+      .container { padding: 16px 6px; }
+      h1 { font-size: 1.5em; }
+      .eval { padding: 12px; }
+      #eval-form { gap: 6px; }
+    }
+    @media (max-width: 400px) {
+      .container { padding: 4px; }
+      h1 { font-size: 1.1em; }
+      .eval h2 { font-size: 1em; }
     }
   </style>
 </head>
 <body>
-  <div id="notifBox" style="display:none;position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 28px;border-radius:12px;font-size:1.1em;font-weight:500;box-shadow:0 2px 12px rgba(42,93,159,0.13);background:#2563eb;color:#fff;transition:opacity 0.3s;"></div>
-  <div class="app">
-    <header>
-      <div class="title">
-        <h1>Évaluations Omeka S</h1>
-        <small>Ajout et affichage des évaluations (identifiant, note, étudiant, cours)</small>
-      </div>
-      <div class="tag">Instance : Exam</div>
-    </header>
-    <section class="card">
-      <div class="card-title"><span class="icon">⚙️</span> API Omeka S</div>
-      <fieldset>
-        <div class="row">
-          <div>
-            <label for="apiBase">URL de base API</label>
-            <input id="apiBase" type="text" value="http://localhost/omeka_exam/api" style="width:100%;max-width:500px;padding:8px;border-radius:8px;border:1px solid #bcd0ee;" />
-            <span class="hint">Exemple : http://localhost/omeka_exam/api</span>
-          </div>
-        </div>
-      </fieldset>
-    </section>
-    <section class="card">
-      <div class="card-title"><span class="icon">📦</span> Ajouter une évaluation</div>
-      <form id="eval-form">
-        <div class="row">
-          <div>
-            <label for="eval-id">Identifiant</label>
-            <input type="text" id="eval-id" placeholder="Identifiant" required />
-          </div>
-          <div>
-            <label for="eval-note">Note</label>
-            <input type="number" id="eval-note" placeholder="Note" required min="0" max="20" step="0.1" />
-          </div>
-          <div>
-            <label for="eval-etudiant">Étudiant</label>
-            <input type="text" id="eval-etudiant" placeholder="Nom de l'étudiant" required />
-          </div>
-          <div>
-            <label for="eval-cours">Cours</label>
-            <input type="text" id="eval-cours" placeholder="Identifiant du cours" required />
-          </div>
-        </div>
-        <div class="btn-row">
-          <button type="submit" class="primary">Ajouter l'évaluation</button>
-        </div>
-      </form>
-      <div id="apiStatus" class="status"></div>
-    </section>
-
-    <section class="card">
-      <div class="card-title"><span class="icon">👤</span> Ajouter un étudiant</div>
-      <form id="etudiant-form">
-        <div class="row">
-          <div>
-            <label for="etudiant-nom">Nom de l'étudiant</label>
-            <input type="text" id="etudiant-nom" placeholder="Nom" required />
-          </div>
-          <div>
-            <label for="etudiant-id">Identifiant</label>
-            <input type="text" id="etudiant-id" placeholder="Identifiant" required />
-          </div>
-        </div>
-        <div class="btn-row">
-          <button type="submit" class="primary">Créer l'étudiant</button>
-        </div>
-      </form>
-      <div id="etudiantStatus" class="status"></div>
-      <div style="margin-top:18px;">
-        <div class="card-title"><span class="icon">📑</span> Liste des étudiants</div>
-        <div id="etudiants-list"></div>
-      </div>
-    </section>
-    <section class="card">
-      <div class="card-title"><span class="icon">📋</span> Liste des évaluations</div>
-      <div id="evals-list"></div>
-    </section>
+  <div class="container">
+    <h1>Liste des évaluations</h1>
+    <div style="margin-bottom:18px;">
+      <label for="apiBase" style="font-weight:500;">URL de base API Omeka S :</label>
+      <input type="text" id="apiBase" value="http://localhost/omeka_exam/api" style="width:100%;max-width:500px;padding:8px;border-radius:8px;border:1px solid #bcd0ee;">
+      <span class="hint">Clés API intégrées automatiquement.</span>
+    </div>
+    <form id="eval-form">
+      <input type="text" id="eval-id" placeholder="Identifiant" required>
+      <input type="number" id="eval-note" placeholder="Note" required min="0" max="20" step="0.1">
+      <input type="text" id="eval-etudiant" placeholder="Étudiant" required>
+      <input type="text" id="eval-cours" placeholder="Cours" required>
+      <button type="submit">Ajouter l'évaluation</button>
+    </form>
+    <div id="evals-list"></div>
+    <div id="apiStatus" class="status"></div>
   </div>
+
   <script>
-    // Clés API Omeka S (à adapter)
-    const API_KEY_ID = 'NrzdvQnYPeEhGGOqupu9xYLjmSVSF5ee';
+    // Clés API Omeka S
+    const API_KEY_ID = 'NrzdvQnYPeEhGGOqupu9xYLjmSVSF5ee'; // key_identity=NrzdvQnYPeEhGGOqupu9xYLjmSVSF5ee
     const API_KEY_SECRET = 'dvBeCMOZXInzu4QZuVs5q5lYy5OqrLD1';
 
     function buildApiUrl(path) {
       const baseInput = document.getElementById('apiBase');
-      const base = baseInput ? baseInput.value.trim().replace(/\/+$|\/+\(?=api)/g, '') : '';
+      let base = baseInput ? baseInput.value.trim().replace(/\/+$|\/+\(?=api)/g, '') : '';
       if (!base) throw new Error("URL API manquante.");
-      const url = new URL(base + path);
+      // S'assurer que le chemin commence par un '/'
+      let pathClean = path.startsWith('/') ? path : '/' + path;
+      const url = new URL(base + pathClean);
       url.searchParams.set('key_identity', API_KEY_ID);
       url.searchParams.set('key_credential', API_KEY_SECRET);
       return url.toString();
@@ -289,20 +160,6 @@
     }
 
     // Fonction pour enregistrer une évaluation via l'API Omeka S
-    function showNotif(message, type = 'ok') {
-      const box = document.getElementById('notifBox');
-      if (!box) return;
-      box.textContent = message;
-      box.style.background = type === 'ok' ? '#2563eb' : '#dc2626';
-      box.style.color = '#fff';
-      box.style.display = 'block';
-      box.style.opacity = '1';
-      setTimeout(() => {
-        box.style.opacity = '0';
-        setTimeout(() => { box.style.display = 'none'; }, 400);
-      }, 2200);
-    }
-
     async function setEval(evaluation) {
       const status = document.getElementById('apiStatus');
       status.textContent = 'Enregistrement en cours…';
@@ -318,61 +175,10 @@
         await apiPost('/items', payload);
         status.textContent = 'Évaluation enregistrée !';
         status.className = 'status ok';
-        showNotif('Évaluation enregistrée avec succès !', 'ok');
         showEval();
       } catch (err) {
         status.textContent = 'Erreur : ' + err.message;
         status.className = 'status error';
-        showNotif('Erreur lors de l\'enregistrement : ' + err.message, 'error');
-      }
-    }
-
-    // Fonction pour créer un étudiant
-    async function createEtudiant(nom, identifiant) {
-      const status = document.getElementById('etudiantStatus');
-      status.textContent = 'Création en cours…';
-      status.className = 'status';
-      const payload = {
-        "dcterms:title": [{ "type": "literal", "@value": nom }],
-        "dcterms:identifier": [{ "type": "literal", "@value": identifiant }],
-        "o:is_public": true,
-        "o:resource_class": {"@id": "http://localhost/omeka_exam/api/resource_classes/106"}
-      };
-      try {
-        await apiPost('/items', payload);
-        status.textContent = 'Étudiant créé !';
-        status.className = 'status ok';
-        showNotif('Étudiant créé avec succès !', 'ok');
-        showEtudiants();
-      } catch (err) {
-        status.textContent = 'Erreur : ' + err.message;
-        status.className = 'status error';
-        showNotif('Erreur lors de la création : ' + err.message, 'error');
-      }
-    }
-
-    // Fonction pour afficher la liste des étudiants
-    async function showEtudiants() {
-      const etudiantsList = document.getElementById('etudiants-list');
-      if (!etudiantsList) return;
-      etudiantsList.innerHTML = '<span class="hint">Chargement…</span>';
-      try {
-        // Filtre sur la classe exam:Etudiant (id 106)
-        const data = await apiGet('/items?resource_class_id=106');
-        if (!Array.isArray(data) || data.length === 0) {
-          etudiantsList.innerHTML = '<span class="hint">Aucun étudiant trouvé.</span>';
-          return;
-        }
-        let html = '<ul style="padding-left:18px;">';
-        data.forEach(e => {
-          const nom = e['dcterms:title']?.[0]?.['@value'] || '(sans nom)';
-          const identifiant = e['dcterms:identifier']?.[0]?.['@value'] || '';
-          html += `<li><strong>${nom}</strong> <span style="color:#2563eb;">(${identifiant})</span></li>`;
-        });
-        html += '</ul>';
-        etudiantsList.innerHTML = html;
-      } catch (err) {
-        etudiantsList.innerHTML = '<span class="hint" style="color:#dc2626;">Erreur : ' + err.message + '</span>';
       }
     }
 
@@ -382,6 +188,7 @@
       status.textContent = 'Chargement des évaluations…';
       status.className = 'status';
       try {
+        // À adapter : filtre sur le resource template si besoin
         const data = await apiGet('/items');
         const evalsList = document.getElementById('evals-list');
         evalsList.innerHTML = '';
@@ -410,7 +217,7 @@
       }
     }
 
-    // Gestion du formulaire d'ajout d'évaluation
+    // Gestion du formulaire d'ajout
     document.getElementById('eval-form').addEventListener('submit', function(event) {
       event.preventDefault();
       const id = document.getElementById('eval-id').value.trim();
@@ -422,20 +229,6 @@
         this.reset();
       }
     });
-
-    // Gestion du formulaire d'ajout d'étudiant
-    document.getElementById('etudiant-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const nom = document.getElementById('etudiant-nom').value.trim();
-      const identifiant = document.getElementById('etudiant-id').value.trim();
-      if (nom && identifiant) {
-        createEtudiant(nom, identifiant);
-        this.reset();
-      }
-    });
-
-    // Affichage initial de la liste des étudiants
-    showEtudiants();
 
     // Affichage initial
     showEval();

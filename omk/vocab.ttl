@@ -1,1 +1,79 @@
 
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+
+@prefix exam: <https://lytysyy.github.io/EXAM_THYP_25-26/vocab#> .
+@base <https://lytysyy.github.io/EXAM_THYP_25-26/vocab> .
+
+<https://lytysyy.github.io/EXAM_THYP_25-26/vocab>
+  a owl:Ontology ;
+  dct:title "Vocabulaire EXAM_THYP_25-26 - Évaluations Master"@fr ;
+  dct:description "Vocabulaire pour la gestion des évaluations des étudiants dans les cours d'un Master."@fr ;
+  owl:versionInfo "1.0.0"@fr .
+
+###########
+# CLASSES #
+###########
+
+exam:Etudiant a owl:Class ;
+  rdfs:label "Étudiant"@fr ;
+  rdfs:comment "Un étudiant inscrit dans le Master."@fr .
+
+exam:Cours a owl:Class ;
+  rdfs:label "Cours"@fr ;
+  rdfs:comment "Un cours du Master."@fr .
+
+exam:Evaluation a owl:Class ;
+  rdfs:label "Évaluation"@fr ;
+  rdfs:comment "Une évaluation d'un étudiant dans un cours donné."@fr .
+
+exam:Note a owl:Class ;
+  rdfs:label "Note"@fr ;
+  rdfs:comment "La note obtenue lors d'une évaluation."@fr .
+
+exam:Enseignant a owl:Class ;
+  rdfs:label "Enseignant"@fr ;
+  rdfs:comment "L'enseignant responsable du cours ou de l'évaluation."@fr .
+
+################
+# PROPRIÉTÉS   #
+################
+
+exam:aPourNote a owl:ObjectProperty ;
+  rdfs:domain exam:Evaluation ;
+  rdfs:range exam:Note ;
+  rdfs:label "a pour note"@fr ;
+  rdfs:comment "Relie une évaluation à une note."@fr .
+
+exam:aPourCours a owl:ObjectProperty ;
+  rdfs:domain exam:Evaluation ;
+  rdfs:range exam:Cours ;
+  rdfs:label "a pour cours"@fr ;
+  rdfs:comment "Relie une évaluation à un cours."@fr .
+
+exam:aPourEtudiant a owl:ObjectProperty ;
+  rdfs:domain exam:Evaluation ;
+  rdfs:range exam:Etudiant ;
+  rdfs:label "a pour étudiant"@fr ;
+  rdfs:comment "Relie une évaluation à un étudiant."@fr .
+
+exam:aPourEnseignant a owl:ObjectProperty ;
+  rdfs:domain exam:Evaluation ;
+  rdfs:range exam:Enseignant ;
+  rdfs:label "a pour enseignant"@fr ;
+  rdfs:comment "Relie une évaluation à un enseignant."@fr .
+
+exam:dateEvaluation a owl:DatatypeProperty ;
+  rdfs:domain exam:Evaluation ;
+  rdfs:range xsd:date ;
+  rdfs:label "date de l'évaluation"@fr ;
+  rdfs:comment "Date de l'évaluation (YYYY-MM-DD)."@fr .
+
+exam:valeurNote a owl:DatatypeProperty ;
+  rdfs:domain exam:Note ;
+  rdfs:range xsd:decimal ;
+  rdfs:label "valeur de la note"@fr ;
+  rdfs:comment "Valeur numérique de la note (ex: 15.5)."@fr .

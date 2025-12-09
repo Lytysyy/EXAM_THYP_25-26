@@ -1,2 +1,2 @@
-# EXAMEN Thyp du 9 decembre 2025
+# EXAMEN THYP du 9 decembre 2025
 ## Henkous Litissia 

@@ -20,7 +20,8 @@
 </head>
 <body>
   <h1>Liste des cours</h1>
-  <div id="cours-list"></div>
+    <input type="text" id="filter-input" placeholder="Filtrer par titre ou identifiant..." style="margin-bottom:16px; width:100%; max-width:400px; padding:8px;">
+    <div id="cours-list"></div>
 
   <script>
     // Exemple de données (à remplacer par une vraie source si besoin)
@@ -44,14 +45,24 @@
 
     // Fonction pour récupérer la liste des cours
     function getCours() {
-      // Ici, on retourne les données statiques, mais on pourrait faire un fetch AJAX
       return coursData;
+    }
+
+    // Fonction pour filtrer la liste des cours
+    function filterCours(cours, filterText) {
+      if (!filterText) return cours;
+      filterText = filterText.toLowerCase();
+      return cours.filter(c =>
+        c.titre.toLowerCase().includes(filterText) ||
+        c.id.toLowerCase().includes(filterText)
+      );
     }
 
     // Fonction pour afficher la liste des cours
     function showCours() {
       const coursList = document.getElementById('cours-list');
-      const cours = getCours();
+      const filterText = document.getElementById('filter-input').value;
+      const cours = filterCours(getCours(), filterText);
       coursList.innerHTML = '';
       cours.forEach(c => {
         const div = document.createElement('div');
@@ -67,6 +78,9 @@
         coursList.appendChild(div);
       });
     }
+
+    // Mettre à jour l'affichage lors de la saisie dans le filtre
+    document.getElementById('filter-input').addEventListener('input', showCours);
 
     // Affichage au chargement
     showCours();

@@ -92,65 +92,91 @@
   </div>
 
   <script>
-    // Exemple de données (à remplacer par une vraie source si besoin)
-    const coursData = [
-      {
-        id: 'C001',
-        titre: 'Mathématiques avancées',
-        etudiants: ['Alice Dupont', 'Bob Martin', 'Chloé Bernard']
-      },
-      {
-        id: 'C002',
-        titre: 'Physique quantique',
-        etudiants: ['David Leroy', 'Emma Dubois']
-      },
-      {
-        id: 'C003',
-        titre: 'Programmation Web',
-        etudiants: ['Alice Dupont', 'Emma Dubois', 'François Petit']
-      }
-    ];
+    // URL de l'API Omeka S
+    const API_BASE = 'http://localhost/omeka_exam/api';
+    const API_KEY_ID = 'NrzdvQnYPeEhGGOqupu9xYLjmSVSF5ee';
+    const API_KEY_SECRET = 'dvBeCMOZXInzu4QZuVs5q5lYy5OqrLD1';
 
-    // Fonction pour récupérer la liste des cours
-    function getCours() {
-      return coursData;
+    function buildApiUrl(path) {
+      const url = new URL(API_BASE + path);
+      url.searchParams.set('key_identity', API_KEY_ID);
+      url.searchParams.set('key_credential', API_KEY_SECRET);
+      return url.toString();
     }
 
-    // Fonction pour filtrer la liste des cours
-    function filterCours(cours, filterText) {
-      if (!filterText) return cours;
-      filterText = filterText.toLowerCase();
-      return cours.filter(c =>
-        c.titre.toLowerCase().includes(filterText) ||
-        c.id.toLowerCase().includes(filterText)
-      );
+    async function apiGet(path) {
+      const url = buildApiUrl(path);
+      const res = await fetch(url, { method: 'GET' });
+      if (!res.ok) throw new Error(`GET ${url} → ${res.status} ${res.statusText}`);
+      return res.json();
     }
 
-    // Fonction pour afficher la liste des cours
-    function showCours() {
+    // Récupère les cours et les étudiants liés
+    async function getCoursEtudiants() {
+      // Cours : resource_class_id=107 (exemple, à adapter selon ta config)
+      const cours = await apiGet('/items?resource_class_id=107');
+      // Étudiants : resource_class_id=106
+      const etudiants = await apiGet('/items?resource_class_id=106');
+      // On récupère aussi toutes les évaluations pour faire le lien
+      const evals = await apiGet('/items?resource_class_id=108');
+      // On mappe les étudiants par identifiant
+      const etuMap = {};
+      etudiants.forEach(e => {
+        const nom = e['dcterms:title']?.[0]?.['@value'] || '(sans nom)';
+        const identifiant = e['dcterms:identifier']?.[0]?.['@value'] || '';
+        etuMap[identifiant] = nom;
+      });
+      // On mappe les étudiants inscrits à chaque cours via les évaluations
+      const coursList = cours.map(c => {
+        const idCours = c['dcterms:identifier']?.[0]?.['@value'] || '';
+        const titre = c['dcterms:title']?.[0]?.['@value'] || '(sans titre)';
+        // On cherche les évaluations liées à ce cours
+        const evalsCours = evals.filter(ev => (ev['exam:aPourCours']?.[0]?.['@value'] || '') === idCours);
+        // On récupère les identifiants étudiants
+        const etudiantsInscrits = evalsCours.map(ev => {
+          const idEtu = ev['exam:aPourEtudiant']?.[0]?.['@value'] || '';
+          return etuMap[idEtu] ? etuMap[idEtu] + ' (' + idEtu + ')' : idEtu;
+        });
+        return { id: idCours, titre, etudiants: etudiantsInscrits };
+      });
+      return coursList;
+    }
+
+    // Filtre et affiche la liste des cours dynamiquement
+    async function showCours() {
       const coursList = document.getElementById('cours-list');
       const filterText = document.getElementById('filter-input').value;
-      const cours = filterCours(getCours(), filterText);
-      coursList.innerHTML = '';
-      cours.forEach(c => {
-        const div = document.createElement('div');
-        div.className = 'cours';
-        div.innerHTML = `
-          <h2>${c.titre}</h2>
-          <strong>Identifiant :</strong> ${c.id}<br>
-          <strong>Étudiants inscrits :</strong>
-          <ul class="etudiants">
-            ${c.etudiants.map(e => `<li>${e}</li>`).join('')}
-          </ul>
-        `;
-        coursList.appendChild(div);
-      });
+      coursList.innerHTML = '<span class="hint">Chargement…</span>';
+      try {
+        const cours = await getCoursEtudiants();
+        const filtered = !filterText ? cours : cours.filter(c =>
+          c.titre.toLowerCase().includes(filterText.toLowerCase()) ||
+          c.id.toLowerCase().includes(filterText.toLowerCase())
+        );
+        coursList.innerHTML = '';
+        if (filtered.length === 0) {
+          coursList.innerHTML = '<span class="hint">Aucun cours trouvé.</span>';
+          return;
+        }
+        filtered.forEach(c => {
+          const div = document.createElement('div');
+          div.className = 'cours';
+          div.innerHTML = `
+            <h2>${c.titre}</h2>
+            <strong>Identifiant :</strong> ${c.id}<br>
+            <strong>Étudiants inscrits :</strong>
+            <ul class="etudiants">
+              ${c.etudiants.length ? c.etudiants.map(e => `<li>${e}</li>`).join('') : '<li><em>Aucun étudiant</em></li>'}
+            </ul>
+          `;
+          coursList.appendChild(div);
+        });
+      } catch (err) {
+        coursList.innerHTML = '<span class="hint" style="color:#dc2626;">Erreur : ' + err.message + '</span>';
+      }
     }
 
-    // Mettre à jour l'affichage lors de la saisie dans le filtre
     document.getElementById('filter-input').addEventListener('input', showCours);
-
-    // Affichage au chargement
     showCours();
   </script>
 </body>

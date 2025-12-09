@@ -5,23 +5,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Liste des cours</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .cours { border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #f9f9f9; }
-    .cours h2 { margin: 0 0 8px 0; }
-    .etudiants { margin-left: 20px; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: #f4f6fb;
+      color: #222;
+    }
+    .container {
+      max-width: 700px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 24px;
+    }
+    h1 {
+      text-align: center;
+      color: #2a5d9f;
+      margin-bottom: 32px;
+      font-size: 2.2em;
+      letter-spacing: 1px;
+    }
+    #filter-input {
+      margin-bottom: 24px;
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #bcd0ee;
+      font-size: 1em;
+      box-shadow: 0 2px 8px rgba(42,93,159,0.05);
+      transition: border 0.2s;
+    }
+    #filter-input:focus {
+      border: 1.5px solid #2a5d9f;
+      outline: none;
+    }
+    .cours {
+      border: 1px solid #e3eaf5;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg,#f9fbff 80%,#eaf2fb 100%);
+      box-shadow: 0 2px 12px rgba(42,93,159,0.07);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .cours:hover {
+      box-shadow: 0 6px 24px rgba(42,93,159,0.13);
+      transform: translateY(-2px) scale(1.01);
+    }
+    .cours h2 {
+      margin: 0 0 10px 0;
+      color: #2a5d9f;
+      font-size: 1.3em;
+    }
+    .cours strong {
+      color: #3a7bd5;
+    }
+    .etudiants {
+      margin-left: 0;
+      padding-left: 18px;
+      margin-top: 6px;
+    }
+    .etudiants li {
+      margin-bottom: 2px;
+      font-size: 1em;
+      color: #222;
+    }
     @media (max-width: 768px) {
-      body { margin: 8px; }
-      .cours { padding: 8px; }
+      .container { padding: 16px 6px; }
+      h1 { font-size: 1.5em; }
+      .cours { padding: 12px; }
     }
     @media (max-width: 400px) {
-      .cours h2 { font-size: 1.1em; }
+      .container { padding: 4px; }
+      h1 { font-size: 1.1em; }
+      .cours h2 { font-size: 1em; }
     }
   </style>
 </head>
 <body>
-  <h1>Liste des cours</h1>
-    <input type="text" id="filter-input" placeholder="Filtrer par titre ou identifiant..." style="margin-bottom:16px; width:100%; max-width:400px; padding:8px;">
+  <div class="container">
+    <h1>Liste des cours</h1>
+    <input type="text" id="filter-input" placeholder="Filtrer par titre ou identifiant...">
     <div id="cours-list"></div>
+  </div>
 
   <script>
     // Exemple de données (à remplacer par une vraie source si besoin)
